@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif}
+body{background:#fff;padding:20px;color:#222}
+h2{font-size:18px;font-weight:700;color:#1a3a5c;margin-bottom:4px}
+.sub{font-size:12px;color:#888;margin-bottom:16px}
+.section-label{font-size:10px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:.5px;margin:10px 0 6px}
+.props{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.prop-btn{padding:6px 16px;border-radius:20px;border:1.5px solid #ccc;background:#fff;font-size:12px;cursor:pointer;transition:all .15s}
+.prop-btn.on{background:#1a3a5c;color:#fff;border-color:#1a3a5c}
+.sustrato-group{margin-bottom:8px}
+.group-label{font-size:11px;font-weight:700;margin-bottom:4px}
+.sustrato-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:4px 12px;border-radius:20px;border:1.5px solid;background:#fff;font-size:11px;cursor:pointer;transition:all .15s}
+.chip.on{color:#fff}
+.actions{display:flex;gap:8px;margin:10px 0 16px}
+.action-btn{padding:5px 16px;border-radius:20px;border:1.5px solid #ccc;background:#fff;font-size:11px;cursor:pointer}
+.action-btn:hover{background:#f0f0f0}
+.legend{display:flex;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11px}
+.leg-dot{width:12px;height:12px;border-radius:2px}
+.chart-area{background:#fff;border:1px solid #eee;border-radius:8px;padding:16px;min-height:260px}
+.bars{display:flex;align-items:flex-end;gap:8px;height:220px;overflow-x:auto;padding-bottom:24px;position:relative}
+.bar-wrap{display:flex;flex-direction:column;align-items:center;min-width:52px;position:relative}
+.bar{width:44px;border-radius:4px 4px 0 0;transition:height .3s ease;cursor:pointer;position:relative}
+.bar:hover{opacity:.85}
+.bar-val{font-size:9px;color:#555;margin-bottom:2px;text-align:center}
+.bar-lbl{font-size:9px;color:#444;text-align:center;margin-top:4px;word-break:break-word;max-width:52px;line-height:1.2}
+.no-data{display:flex;align-items:center;justify-content:center;height:200px;color:#aaa;font-size:13px}
+</style>
+</head>
+<body>
+<h2>Comparador de Carbonilos — MISC</h2>
+<div class="sub">Propiedades físicas de sustratos Grignard — selecciona carbonilos y propiedad</div>
+
+<div class="section-label">Propiedad a comparar</div>
+<div class="props">
+  <button class="prop-btn on" onclick="setProp('pm',this)">PM (g/mol)</button>
+  <button class="prop-btn" onclick="setProp('peb',this)">P. ebullición (°C)</button>
+  <button class="prop-btn" onclick="setProp('dens',this)">Densidad (g/cm³)</button>
+  <button class="prop-btn" onclick="setProp('pka',this)">pKa</button>
+</div>
+
+<div class="section-label">Selecciona los carbonilos</div>
+
+<div class="sustrato-group">
+  <div class="group-label" style="color:#e07b00">🟠 Cetonas alifáticas</div>
+  <div class="sustrato-chips">
+    <div class="chip on" data-group="cetona" data-pm="58.08" data-peb="56" data-dens="0.79" data-pka="26.5" onclick="toggleChip(this)" style="border-color:#e07b00;color:#e07b00">Acetona</div>
+    <div class="chip on" data-group="cetona" data-pm="72.11" data-peb="79.6" data-dens="0.805" data-pka="24.4" onclick="toggleChip(this)" style="border-color:#e07b00;color:#e07b00">Butanona</div>
+    <div class="chip on" data-group="cetona" data-pm="86.13" data-peb="101.9" data-dens="0.82" data-pka="27.1" onclick="toggleChip(this)" style="border-color:#e07b00;color:#e07b00">3-Pentanona</div>
+    <div class="chip on" data-group="cetona" data-pm="98.14" data-peb="155.7" data-dens="0.948" data-pka="26" onclick="toggleChip(this)" style="border-color:#e07b00;color:#e07b00">Ciclohexanona</div>
+  </div>
+</div>
+
+<div class="sustrato-group">
+  <div class="group-label" style="color:#6a4fcf">🟣 Cetonas aromáticas</div>
+  <div class="sustrato-chips">
+    <div class="chip on" data-group="arom" data-pm="120.15" data-peb="202" data-dens="1.03" data-pka="N/A" onclick="toggleChip(this)" style="border-color:#6a4fcf;color:#6a4fcf">Acetofenona</div>
+    <div class="chip on" data-group="arom" data-pm="182.22" data-peb="305.4" data-dens="1.11" data-pka="N/A" onclick="toggleChip(this)" style="border-color:#6a4fcf;color:#6a4fcf">Benzofenona</div>
+  </div>
+</div>
+
+<div class="sustrato-group">
+  <div class="group-label" style="color:#1d9e75">🟢 Aldehídos</div>
+  <div class="sustrato-chips">
+    <div class="chip on" data-group="ald" data-pm="30.03" data-peb="-19.5" data-dens="0.8" data-pka="13.3" onclick="toggleChip(this)" style="border-color:#1d9e75;color:#1d9e75">Metanal</div>
+    <div class="chip on" data-group="ald" data-pm="106.12" data-peb="179" data-dens="1.05" data-pka="14.9" onclick="toggleChip(this)" style="border-color:#1d9e75;color:#1d9e75">Benzaldehído</div>
+    <div class="chip on" data-group="ald" data-pm="134.18" data-peb="220" data-dens="1.01" data-pka="N/A" onclick="toggleChip(this)" style="border-color:#1d9e75;color:#1d9e75">3-fenilpropanal</div>
+    <div class="chip on" data-group="ald" data-pm="86.13" data-peb="74" data-dens="0.78" data-pka="N/A" onclick="toggleChip(this)" style="border-color:#1d9e75;color:#1d9e75">Pivaldehído</div>
+    <div class="chip on" data-group="ald" data-pm="100.16" data-peb="131" data-dens="0.83" data-pka="N/A" onclick="toggleChip(this)" style="border-color:#1d9e75;color:#1d9e75">Hexanal</div>
+    <div class="chip on" data-group="ald" data-pm="70.09" data-peb="102" data-dens="0.85" data-pka="N/A" onclick="toggleChip(this)" style="border-color:#1d9e75;color:#1d9e75">2-butenal</div>
+  </div>
+</div>
+
+<div class="actions">
+  <button class="action-btn" onclick="selectAll()">Seleccionar todos</button>
+  <button class="action-btn" onclick="clearAll()">Limpiar</button>
+</div>
+
+<div class="legend">
+  <div class="leg-item"><div class="leg-dot" style="background:#e07b00"></div>Cetona alifática</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#6a4fcf"></div>Cetona aromática</div>
+  <div class="leg-item"><div class="leg-dot" style="background:#1d9e75"></div>Aldehído</div>
+</div>
+
+<div class="chart-area">
+  <div class="bars" id="bars"></div>
+</div>
+
+<script>
+const COLORS = {cetona:'#e07b00', arom:'#6a4fcf', ald:'#1d9e75'};
+let currentProp = 'pm';
+const propKeys = {pm:'data-pm',peb:'data-peb',dens:'data-dens',pka:'data-pka'};
+const propLabels = {pm:'PM (g/mol)',peb:'P. ebullición (°C)',dens:'Densidad (g/cm³)',pka:'pKa'};
+
+function setProp(p, btn) {
+  currentProp = p;
+  document.querySelectorAll('.prop-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  render();
+}
+
+function toggleChip(el) {
+  el.classList.toggle('on');
+  if(el.classList.contains('on')) {
+    el.style.background = '#fff';
+    el.style.color = el.style.borderColor;
+  } else {
+    el.style.background = COLORS[el.dataset.group] + '22';
+    el.style.color = '#aaa';
+    el.style.borderColor = '#ddd';
+  }
+  render();
+}
+
+function selectAll() {
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.add('on');
+    c.style.background = '#fff';
+    c.style.color = c.dataset.group === 'cetona' ? '#e07b00' : c.dataset.group === 'arom' ? '#6a4fcf' : '#1d9e75';
+    c.style.borderColor = c.style.color;
+  });
+  render();
+}
+
+function clearAll() {
+  document.querySelectorAll('.chip').forEach(c => {
+    c.classList.remove('on');
+    c.style.background = '#f5f5f5';
+    c.style.color = '#aaa';
+    c.style.borderColor = '#ddd';
+  });
+  render();
+}
+
+function render() {
+  const selected = [...document.querySelectorAll('.chip.on')];
+  const bars = document.getElementById('bars');
+  if(!selected.length) { bars.innerHTML = '<div class="no-data">Selecciona al menos un carbonilo</div>'; return; }
+  
+  const key = propKeys[currentProp];
+  const vals = selected.map(c => parseFloat(c.getAttribute(key)));
+  const maxVal = Math.max(...vals.filter(v => !isNaN(v)));
+  
+  bars.innerHTML = selected.map((c,i) => {
+    const val = parseFloat(c.getAttribute(key));
+    if(isNaN(val)) return `<div class="bar-wrap"><div class="bar-val">N/A</div><div class="bar" style="height:4px;background:#ddd;width:44px"></div><div class="bar-lbl">${c.textContent}</div></div>`;
+    const h = Math.max(8, Math.round((val / maxVal) * 200));
+    const color = COLORS[c.dataset.group];
+    return `<div class="bar-wrap">
+      <div class="bar-val">${val}</div>
+      <div class="bar" style="height:${h}px;background:${color}" title="${c.textContent}: ${val}"></div>
+      <div class="bar-lbl">${c.textContent}</div>
+    </div>`;
+  }).join('');
+}
+
+render();
+</script>
+</body>
+</html>
